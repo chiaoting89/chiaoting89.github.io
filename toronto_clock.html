@@ -1,75 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>多伦多时钟</title>
-    <style type="text/css">
-        body {
-            background-color: white;
-        }
-        .clock {
-            display: inline-block;
-            position: relative; /* 使指针相对于时钟定位 */
-            font-size: 48px;
-            vertical-align: top;
-            margin-top: 100px;
-            padding: 20px;
-            border-radius: 20px;
-            background-color: pink;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
-        .hour-hand, .minute-hand, .second-hand {
-            position: absolute; /* 将指针绝对定位 */
-            width: 4px; /* 指针的宽度 */
-            height: 40%; /* 指针的长度 */
-            background-color: black;
-            transform-origin: bottom center; /* 指针旋转的基点 */
-            transition: all 0.5s ease-in-out; /* 指针变化的过渡效果 */
-        }
-        .hour-hand {
-            height: 30%;
-            z-index: 3; /* 将小时指针放在最上层 */
-        }
-        .minute-hand {
-            height: 45%;
-            z-index: 2; /* 将分钟指针放在中间层 */
-        }
-        .second-hand {
-            z-index: 1; /* 将秒钟指针放在最底层 */
-        }
+  <head>
+    <meta charset="utf-8">
+    <title>Toronto time</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+        margin: 0;
+      }
+      h1, #date, #time, #weekday, #timezone {
+        text-align: center;
+        color: pink;
+      }
+      h1 {
+        margin-bottom: 10px;
+      }
+      #date {
+        margin-top: 10px;
+      }
+      #date, #time, #weekday {
+        font-size: 2em;
+      }
+      #timezone {
+        font-size: 1.2em;
+        margin-top: 20px;
+      }
+      .container {
+        border-radius: 200px;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        height: 230px;
+        width: 400px;
+        font-family: Comic Sans MS, sans-serif; /* 新增的字體屬性 */
+      }
     </style>
-</head>
-<body>
-    <div class="clock">
-        <script>
-            function updateTime() {
-                var d = new Date();
-                var utcOffset = -4; // 加拿大多伦多为 UTC-4
-                var localTime = d.getTime() + (d.getTimezoneOffset() * 60000);
-                var torontoTime = new Date(localTime + (utcOffset * 3600000));
-                var hours = torontoTime.getHours();
-                var minutes = torontoTime.getMinutes();
-                var seconds = torontoTime.getSeconds();
-                var hourHand = document.querySelector(".hour-hand");
-                var minuteHand = document.querySelector(".minute-hand");
-                var secondHand = document.querySelector(".second-hand");
-                var hourAngle = (hours % 12) / 12 * 360 + minutes / 60 * 30; // 计算小时指针的角度
-                var minuteAngle = minutes / 60 * 360 + seconds / 60 * 6; // 计算分钟指针的角度
-                var secondAngle = seconds / 60 * 360; // 计算秒钟指针的角度
-                hourHand.style.transform = `rotate(${hourAngle}deg)`; // 旋转小时指针的位置
-                minuteHand.style.transform = `rotate(${minuteAngle}deg)`; // 旋转分钟指针的位置
-                secondHand.style.transform = `rotate(${secondAngle}deg)`; // 旋转秒钟指针的位置
-                var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][torontoTime.getDay()];
-                var ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12;
-                minutes = (minutes < 10 ? "0" : "") + minutes;
-                seconds = (seconds < 10 ? "0" : "") + seconds;
-                var timeString = hours + ":" + minutes + ":" + seconds + ' ' + ampm + '<br>' + daysOfWeek; // 添加星期几的显示
-                document.getElementById("clock").innerHTML = timeString;
-            }
-            setInterval(updateTime, 1000);
-        </script>
-        <div id="clock"></div>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Toronto time</h1>
+      <div id="date"></div>
+      <div id="time"></div>
+      <div id="weekday"></div>
     </div>
-</body>
+    <script>
+      function updateTime() {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en');
+        const timeStr = now.toLocaleTimeString('en');
+        const weekdayStr = now.toLocaleDateString('en', { weekday: 'long' });
+        document.getElementById("date").innerText = `${dateStr}`;
+        document.getElementById("time").innerText = `${timeStr}`;
+        document.getElementById("weekday").innerText = `${weekdayStr}`;
+      }
+      setInterval(updateTime, 1000); //每秒更新一次
+    </script>
+  </body>
 </html>
